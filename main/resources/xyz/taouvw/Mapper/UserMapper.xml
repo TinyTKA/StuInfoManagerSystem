@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.taouvw.Mapper.UserMapper">
+    <update id="UpdateStuInfo">
+        update stu set name=#{name},age=#{age},gender=#{gender},date=#{date},passwd=#{passwd} where code=#{code}
+    </update>
+    <update id="UpdatePasswd">
+        update stu set passwd=#{passwd} where code=#{code}
+    </update>
+
+
+    <select id="selectAll" resultType="xyz.taouvw.pojo.User">
+        select * from stu
+    </select>
+
+    <select id="selectByid" resultType="xyz.taouvw.pojo.User">
+        select * from stu where code=#{code}
+    </select>
+
+    <select id="LoginSelectByid" resultType="xyz.taouvw.pojo.User">
+        select * from stu where code=#{code} and passwd=#{passwd}
+    </select>
+
+    <insert id="addStu">
+        insert into stu(id,code, name, age, gender,date,passwd) value(null,#{code},#{name},#{age},#{gender},#{date},#{passwd})
+    </insert>
+
+    <delete id="deleteById" parameterType="string">
+        delete from stu where code=#{code}
+    </delete>
+
+    <delete id="deleteByCodes">
+        delete from stu where code in
+        <foreach collection="codes" item="code" separator="," open="(" close=")">
+            #{code}
+        </foreach>
+    </delete>
+
+</mapper>

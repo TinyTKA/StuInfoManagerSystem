@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.taouvw.Mapper.AdminMapper">
+    <insert id="addAdmin">
+        insert into admins(name,passwd) value(#{name},#{passwd})
+    </insert>
+
+
+    <select id="searchAdmin" resultType="xyz.taouvw.pojo.Admin">
+        select * from admins where code=#{code} and passwd=#{passwd}
+    </select>
+</mapper>
