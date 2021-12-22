@@ -1,0 +1,175 @@
+/*标题栏*/
+.el-row {
+    margin: 20px 20px 50px;
+}
+
+.el-col {
+    border-radius: 4px;
+}
+
+.bg-purple-dark {
+    background: #99a9bf;
+}
+
+.bg-purple {
+    background: #d3dce6;
+}
+
+.bg-purple-light {
+    background: #e5e9f2;
+}
+
+.grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+}
+
+.row-bg {
+    padding: 10px 0;
+    background-color: #f9fafc;
+}
+
+/*标题栏名字*/
+#username {
+    width: 250px;
+    border-style: dotted;
+    border-width: 1px;
+    border-color: #2484de;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    font-size:1.5vw;
+    font-family: "Hiragino Sans GB",Arial,sans-serif;
+    animation: myfirst 10s linear 2s infinite alternate;
+}
+
+@keyframes myfirst {
+    0% {
+
+        left: 0px;
+        top: 0px;
+    }
+    25% {
+
+        left: 300px;
+        top: 0px;
+    }
+    50% {
+
+        left: 600px;
+        top: 0px;
+    }
+    75% {
+
+        left: 900px;
+        top: 0px;
+    }
+    100% {
+
+        left: 1200px;
+        top: 0px;
+    }
+}
+#asideBar{
+    font-size: 1vw;
+    color: #303133;
+    position: relative;
+    top: 1vw;
+    left: 4vw;
+}
+/*头像*/
+#avatar {
+    position: relative;
+    left: 150px;
+    top: 30px;
+    width: 5vw;
+    height: 5vw;
+
+}
+
+#showuser {
+    font-size: 1vw;
+    color: #303133;
+    position: relative;
+    top: 3vw;
+    left: 2vw;
+    width: 20vw;
+    height: 50px;
+    border-width: 1px;
+    border-style: dashed;
+}
+
+#aside {
+    height: 50vw;
+    border-width: 10px;
+    border-color: #5daf34;
+}
+
+#inputusername {
+    width: 100px;
+    height: 30px;
+    position: relative;
+    left: 70px;
+    top: -15px;
+}
+
+#username1 {
+    position: relative;
+    left: 10px;
+    top: 10px;
+}
+
+#inputpasswd {
+    width: 100px;
+    height: 30px;
+    position: relative;
+    left: 70px;
+    top: -15px;
+}
+
+#passwd {
+    position: relative;
+    left: 15px;
+    top: 10px;
+}
+
+form {
+    position: relative;
+    top: 60px;
+}
+
+/*main*/
+#main {
+    height: 50vw;
+}
+
+.el-table .warning-row {
+    background: oldlace;
+}
+
+.el-table .success-row {
+    background: #f0f9eb;
+}
+
+.demo-form-inline {
+    position: relative;
+    top: 15px;
+    left: 20px;
+}
+
+#operation {
+    position: relative;
+    top: -47px;
+    left: 360px;
+}
+
+#table {
+    position: relative;
+    top: -30px;
+}
+
+#bar {
+    position: relative;
+    top: -20px;
+    left: 400px;
+}

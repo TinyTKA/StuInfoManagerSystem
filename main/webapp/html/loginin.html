@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" href="../css/loginin.css">
+    <script src="../js/vue.js"></script>
+    <script src="../js/axios-0.18.0.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+
+<div id="app">
+
+    <div id="input">
+        <div id="header">
+            请登录
+        </div>
+        <div id="inputDiv1">
+            <div id="inputuser">用户名 :</div>
+            <div id="Myinput">
+                <el-input
+                        placeholder="请输入内容"
+                        v-model="InputData.code"
+
+                        clearable>
+                </el-input>
+            </div>
+
+        </div>
+
+
+        <div id="inputDiv2">
+            <div id="inputpwd">密码 :</div>
+            <div id="Mypwd">
+                <el-input placeholder="请输入密码" v-model="InputData.passwd" show-password></el-input>
+            </div>
+        </div>
+        <div id="inputButton">
+            <el-row id="buttonRow">
+                <el-button type="primary" id="subButton" @click="signIn">登录</el-button>
+                <el-button @click="signUp">注册</el-button>
+            </el-row>
+
+        </div>
+
+
+    </div>
+</div>
+
+
+<script>
+    new Vue({
+
+        el: "#app",
+
+        data() {
+            return {
+                InputData: {
+                    code: '',
+                    passwd: ''
+
+                },
+                remoteUrl: 'http://localhost:8080/myWeb_war',
+                localUrl: 'http://182.92.173.108:8080/myweb'
+
+            }
+        },
+
+        methods: {
+            signIn() {
+                var _this = this;
+                console.log(_this.InputData);
+                axios({
+                    method: "post",
+                    url: _this.localUrl + "/login/searchAdmin",
+                    data: _this.InputData
+                }).then(function (resp) {
+                    if (resp.data == "success") {
+                        _this.$message({
+                            message: '登录成功',
+                            type: 'success'
+                        });
+                        window.location = _this.localUrl + "/html/redirect.html";
+                    } else {
+                        _this.$message({
+                            message: '登录失败，请重试',
+                            type: 'error'
+                        });
+                    }
+                })
+            },
+            signUp() {
+                var _this = this;
+                console.log(_this.InputData);
+                axios({
+                    method: "post",
+                    url: _this.localUrl + "/login/addAdmin",
+                    data: _this.InputData
+                }).then(function (resp) {
+                    if (resp.data == "success") {
+                        _this.$message({
+                            message: '注册成功',
+                            type: 'success'
+                        });
+                    } else {
+                        _this.$message({
+                            message: '注册失败，请重试',
+                            type: 'error'
+                        });
+                    }
+                })
+            },
+
+        },
+
+
+    })
+</script>
+</body>
+</html>

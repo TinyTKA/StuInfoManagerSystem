@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>跳转中。。。</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/axios-0.18.0.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+
+<div id="app">
+    <h5>
+        跳转中。。。
+    </h5>
+</div>
+<script>
+    new Vue({
+        el: "#app",
+        mounted() {
+            var _this = this;
+            console.log(this.reqData);
+            axios({
+                method: 'post',
+                url: _this.localUrl + "/redirectServlet",
+                data: _this.reqData
+            }).then(function (resp) {
+                if (resp.data == 'user') {
+                    window.location = _this.localUrl + "/html/stuinfo.html";
+                } else if (resp.data == 'admin') {
+                    window.location = _this.localUrl + "/html/login.html";
+                }
+            })
+        },
+        data() {
+            return {
+                reqData: 'redirect',
+                remoteUrl: 'http://localhost:8080/myWeb_war',
+                localUrl: 'http://182.92.173.108:8080/myweb'
+            }
+        },
+        methods: {}
+    })
+</script>
+</body>
+</html>

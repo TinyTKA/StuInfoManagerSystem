@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学生信息</title>
+    <link rel="stylesheet" href="../css/stuinfo.css">
+    <script src="../js/vue.js"></script>
+    <script src="../js/axios-0.18.0.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+<div id="app">
+    <div>
+        <el-container>
+            <!--            头部信息-->
+            <el-header height="300px">
+
+                <el-carousel :interval="4000" type="card" height="350px">
+                    <el-carousel-item v-for="item in imageBox" :key="item.id">
+                        <img :src="item.idView" class="image">
+                    </el-carousel-item>
+                </el-carousel>
+
+            </el-header>
+
+            <el-container>
+                <el-aside width="300px" direction="vertical" id="asideBar">
+                    <div class="demo-image__placeholder">
+                        <div class="block">
+                            <el-image :src="src" id="img"></el-image>
+                        </div>
+                        <span class="demonstration">欢迎你，{{stuInfo.name}}{{stuCode}}</span>
+                    </div>
+
+                    <div id="asideBar_Nav">
+                        <el-row class="tac">
+                            <el-col :span="24">
+                                <el-button type="primary" id="bar1" @click="searchInfo(stuCode)">查询信息</el-button>
+                            </el-col>
+                            <el-col :span="24">
+                                <el-button type="warning" id="bar2" @click="EditInfo(stuCode)">修改信息</el-button>
+                            </el-col>
+                            <el-col :span="24">
+                                <el-button type="danger" id="bar3" @click="dialogTableVisible1 = true">修改密码</el-button>
+                            </el-col>
+                        </el-row>
+
+                    </div>
+                </el-aside>
+
+
+                <el-main>
+                    <el-descriptions title="垂直带边框列表" direction="vertical" :column="3" border id="desc">
+                        <el-descriptions-item label="学生照片">
+                            <div id="div1">
+                                <el-image :src="src" id="stuImg"></el-image>
+                            </div>
+                        </el-descriptions-item>
+                        <el-descriptions-item label="姓名">{{stuInfo.name}}</el-descriptions-item>
+                        <el-descriptions-item label="学号">{{stuInfo.code}}</el-descriptions-item>
+                        <el-descriptions-item label="性别">{{stuInfo.gender}}</el-descriptions-item>
+                        <el-descriptions-item label="入学时间">{{stuInfo.date}}</el-descriptions-item>
+                        <el-descriptions-item label="年龄">{{stuInfo.age}}</el-descriptions-item>
+                        <el-descriptions-item label="备注">空</el-descriptions-item>
+                    </el-descriptions>
+                </el-main>
+
+            </el-container>
+        </el-container>
+    </div>
+
+    <el-dialog
+            title="提示"
+            :visible.sync="dialogVisible"
+            width="30%"
+            :before-close="handleClose">
+                        <span>
+                            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px"
+                                     class="demo-ruleForm">
+
+                              <el-form-item label="学号" prop="code">
+                                <el-input v-model="ruleForm.code" placeholder="请输入学生学号"></el-input>
+                              </el-form-item>
+
+                              <el-form-item label="姓名" prop="name">
+                                <el-input v-model="ruleForm.name" placeholder="请输入学生姓名">
+                                </el-input>
+                              </el-form-item>
+
+                              <el-form-item label="性别" prop="gender">
+                                <el-select v-model="ruleForm.gender" placeholder="请选择性别">
+                                  <el-option label="男" value="男"></el-option>
+                                  <el-option label="女" value="女"></el-option>
+                                </el-select>
+                              </el-form-item>
+
+                                <el-form-item label="年龄" prop="age">
+                                <el-input v-model="ruleForm.age" placeholder="请输入学生年龄"></el-input>
+                              </el-form-item>
+
+                              <el-form-item label="入学时间" required>
+                                <el-col :span="12">
+                                  <el-form-item prop="date">
+                                    <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date"
+                                                    style="width: 100%;"></el-date-picker>
+                                  </el-form-item>
+                                </el-col>
+                              </el-form-item>
+
+
+                              <el-form-item label="备注" prop="desc">
+                                <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+                              </el-form-item>
+
+                              <el-form-item>
+                                <el-button type="primary">立即添加</el-button>
+                                <el-button @click="resetForm('ruleForm')">重置</el-button>
+                              </el-form-item>
+
+                            </el-form>
+                        </span>
+        <span slot="footer" class="dialog-footer">
+                        <el-button @click="dialogVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="updateInfo()">确 定</el-button>
+                      </span>
+    </el-dialog>
+
+
+    <el-dialog title="修改密码" :visible.sync="dialogTableVisible1" id="EditPass">
+        <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px"
+                 class="demo-ruleForm" center="true">
+            <el-form-item label="密码" prop="pass">
+                <el-input type="password" v-model="ruleForm2.pass" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码" prop="checkPass">
+                <el-input type="password" v-model="ruleForm2.checkPass" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="EditPasswd">提交</el-button>
+                <el-button @click="resetForm('ruleForm2')">重置</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+</div>
+<script>
+    new Vue({
+        el: "#app",
+
+        mounted() {
+            var _this = this;
+            // 首次加载时,需要调用一次
+            this.screenWidth = window.innerWidth;
+            this.setSize();
+            // 窗口大小发生改变时,调用一次
+            window.onresize = () => {
+                this.screenWidth = window.innerWidth;
+                this.setSize();
+            };
+            axios({
+                method: 'get',
+                url: "http://localhost:8080/myWeb_war/login/getCode",
+            }).then(function (resp) {
+                _this.stuCode = resp.data;
+            })
+            this.$alert('欢迎你，'+_this.stuCode, '欢迎', {
+                confirmButtonText: '确定',
+                callback: action => {
+                    this.searchInfo(this.stuCode);
+                    this.$message({
+                        type: 'success',
+                        message: `登录成功`
+                    });
+                }
+            });
+
+        },
+        data() {
+            var validatePass = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入密码'));
+                } else {
+                    if (this.ruleForm2.checkPass !== '') {
+                        this.$refs.ruleForm2.validateField('checkPass');
+                    }
+                    callback();
+                }
+            };
+            var validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.ruleForm2.pass) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
+            return {
+                dialogTableVisible1: false,
+                src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
+                stuName: "2001",
+                stuCode: '201900121100',
+                imageBox: [
+                    {id: 0, idView: "../img/head3.jpg"},
+                    {id: 1, idView: "../img/head1.jpg"},
+                    {id: 2, idView: "../img/head2.jpg"}
+                ],
+                passwd1: '',
+                passwd2: '',
+                screenWidth: 0,
+                stuInfo: {
+                    name: '1',
+                    code: '1',
+                    gender: '1',
+                    date: '1',
+                    age: '1'
+                },
+                rules: {
+                    code: [
+                        {required: true, message: '请输入学号', trigger: 'blur'},
+                        {max: 12, message: '长度为12 个字符', trigger: 'blur'}
+                    ],
+                    name: [
+                        {required: true, message: '请输入学生姓名', trigger: 'blur'}
+                    ],
+                    age: [
+                        {required: true, message: '请输入学生年龄', trigger: 'blur'}
+                    ],
+                    gender: [
+                        {required: true, message: '请选择性别', trigger: 'blur'}
+                    ],
+                    date: [
+                        {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
+                    ],
+                    desc: [
+                        {required: false, message: '备注', trigger: 'blur'}
+                    ]
+                },
+                ruleForm: {
+                    code: '',
+                    name: '',
+                    gender: '',
+                    age: '',
+                    date: '',
+                    desc: ''
+                },
+                dialogVisible: false,
+
+                ruleForm2: {
+                    pass: '',
+                    checkPass: ''
+                },
+                rules2: {
+                    pass: [
+                        {validator: validatePass, trigger: 'blur'}
+                    ],
+                    checkPass: [
+                        {validator: validatePass2, trigger: 'blur'}
+                    ]
+                },
+                updatePasswd: {
+                    code: '',
+                    passwd: ''
+                },
+                remoteUrl: 'http://localhost:8080/myWeb_war',
+                localUrl: 'http://182.92.173.108:8080/myweb'
+
+
+            }
+        },
+        methods: {
+            setSize: function () {
+                // 通过浏览器宽度(图片宽度)计算高度
+                this.bannerHeight = 400 / 1920 * this.screenWidth;
+            },
+            searchInfo(code) {
+                var _this = this;
+                console.log(code);
+                axios({
+                    method: 'post',
+                    url: _this.localUrl + "/stu/selectByid",
+                    data: code
+                }).then(function (resp) {
+                    _this.stuInfo = resp.data[0];
+                })
+            },
+            EditInfo(code) {
+                var _this = this;
+                console.log(code);
+                _this.dialogVisible = true;
+                axios({
+                    method: "post",
+                    url: _this.localUrl + "/stu/selectByid",
+                    data: code
+                }).then(function (resp) {
+                    console.log(resp.data);
+                    _this.ruleForm = resp.data[0];
+                });
+
+            },
+            updateInfo() {
+                var _this = this;
+                axios({
+                    method: "post",
+                    url: _this.localUrl + "/stu/UpdateStuInfo",
+                    data: _this.ruleForm
+                }).then(function (resp) {
+                    if (resp.data == "success") {
+                        _this.searchInfo(_this.stuCode);
+                        _this.dialogVisible = false;
+                        _this.$message({
+                            message: '修改成功',
+                            type: 'success'
+                        });
+                    } else {
+                        _this.$message({
+                            message: '修改失败',
+                            type: 'error'
+                        });
+                    }
+                })
+            },
+            EditPasswd() {
+                var _this = this;
+                this.dialogTableVisible1 = true;
+                this.updatePasswd.passwd = this.ruleForm2.checkPass;
+                this.updatePasswd.code = this.stuInfo.code;
+                axios({
+                    method: 'post',
+                    url: _this.localUrl + "/stu/UpdatePasswd",
+                    data: _this.updatePasswd
+                }).then(function (resp) {
+                    if (resp.data == "success") {
+                        _this.$message({
+                            message: '修改成功',
+                            type: 'success'
+                        });
+                    } else {
+                        _this.$message({
+                            message: '修改失败',
+                            type: 'error'
+                        });
+                    }
+                })
+            },
+            submitForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        alert('submit!');
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            }
+
+        }
+    })
+</script>
+
+</body>
+</html>
